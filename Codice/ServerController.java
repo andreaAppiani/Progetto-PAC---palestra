@@ -49,8 +49,9 @@ public class MyController {
 		for (Iterator<Macchinario> iterator = lm.iterator(); iterator.hasNext();) {
 			Macchinario x = (Macchinario) iterator.next();
 			switch(x.getTipo()) {
-				case "Braccia": braccia.add(x); break; //potrei aggiungere un controllo per cui fa "add" solo se non è guasto
+				case "Braccia": braccia.add(x); break; 
 				case "Gambe": gambe.add(x); break;
+				case "Pettorali": pettorali.add(x); break;
 			}
 		}
 		
