@@ -19,6 +19,8 @@ public class AppController {
 		view = v;
 		view.addListener(new getSchedulazione());
 	}
+	// Classe con metodo per "ascoltare" il pulsante che richiede la Scheda originale.
+	// quando viene cliccato invia la richiesta al server, prende la risposta e la passa alla view tramite view.update()
 	class getScheda implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -39,7 +41,7 @@ public class AppController {
 			view.update(parsingMacchinari((String)o.get("lista")));	
 		}	
 	}
-	
+	//Stessa cosa ma per il pulsante che richiede la Schedulazione aggiornata
 	class getSchedulazione implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -61,6 +63,8 @@ public class AppController {
 		}
 	}
 	
+	// Metodo per convertire la stringa ottenuta come risposta del server
+	// in un'effettiva lista di macchinari utilizzabile dal client (in particolare dalla View)
 	private List<Macchinario> parsingMacchinari(String s) {
 		JSONArray Array = new JSONArray(s);
 		List<Macchinario> lista = new ArrayList<>();
