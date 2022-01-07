@@ -22,7 +22,7 @@ public class AppView extends JFrame{
 		initialize();
 		frame.setVisible(true);
 	}
-
+	// Codice scritto in automatico da WindowBuilder
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
@@ -51,7 +51,7 @@ public class AppView extends JFrame{
 		pulsante.addActionListener(a);
 	}
 	
-	
+	// Riceve la lista di Macchinari dal Controller e scrive le loro info nelle "TextLabel" dell'interfaccia
 	public void update(List<Macchinario> l) {
 		label1.setText(l.get(0).toString());
 		label2.setText(l.get(1).toString());
