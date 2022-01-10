@@ -13,14 +13,14 @@ import org.json.JSONObject;
 
 public class AppController {
 
-	private AppView  view;
+	private AppView view;
 	
 	public AppController(AppView v) {
 		view = v;
-		view.addListener(new getSchedulazione());
+		view.addListenerAccedi(new Autenticazione());
+		view.addListenerSchedaOriginale(new getScheda());
+		view.addListenerSchedaAggiornata(new getSchedaAggiornata());
 	}
-	// Classe con metodo per "ascoltare" il pulsante che richiede la Scheda originale.
-	// quando viene cliccato invia la richiesta al server, prende la risposta e la passa alla view tramite view.update()
 	class getScheda implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -38,11 +38,12 @@ public class AppController {
 			}
 			catch (Exception ex) { System.out.println("ECCEZIONE catturata: " + ex); }
             JSONObject o = new JSONObject(s);
-			view.update(parsingMacchinari((String)o.get("lista")));	
+            view.switchPanel("schermata scheda");
+			view.updateTabella(parsingMacchinari((String)o.get("lista")));	
 		}	
 	}
-	//Stessa cosa ma per il pulsante che richiede la Schedulazione aggiornata
-	class getSchedulazione implements ActionListener{
+	
+	class getSchedaAggiornata implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String s = "";
@@ -59,12 +60,36 @@ public class AppController {
 			}
 			catch (Exception ex) { System.out.println("ECCEZIONE catturata: " + ex); }
             JSONObject o = new JSONObject(s);
-			view.update(parsingMacchinari((String)o.get("lista")));	
+            view.switchPanel("schermata scheda");
+			view.updateTabella(parsingMacchinari((String)o.get("lista")));	
 		}
 	}
 	
-	// Metodo per convertire la stringa ottenuta come risposta del server
-	// in un'effettiva lista di macchinari utilizzabile dal client (in particolare dalla View)
+	class Autenticazione implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String s = "";
+			URL url;
+			String MyUrl = "http://localhost:8080/autentica?" + "nome=" + view.getNome() + "&password=" + view.getPassword();
+			try {
+				url = new URL(MyUrl);			
+	            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+	            StringBuilder sb = new StringBuilder();
+	            String line;
+	            while ((line = bufferedReader.readLine()) != null) {sb.append(line);}
+	            bufferedReader.close();
+	            s = sb.toString();
+			}
+			catch (Exception ex) { System.out.println("ECCEZIONE catturata: " + ex); }
+			
+			if(s.equals("AUTENTICATO")) {
+				getScheda get = new getScheda(); 
+				get.actionPerformed(e); //va a eseguire la normale richiesta per la Scheda Originale
+				}
+			else view.loginErrato();
+			}
+		}
+	
 	private List<Macchinario> parsingMacchinari(String s) {
 		JSONArray Array = new JSONArray(s);
 		List<Macchinario> lista = new ArrayList<>();
