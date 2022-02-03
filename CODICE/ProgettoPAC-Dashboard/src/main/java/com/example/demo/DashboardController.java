@@ -43,7 +43,7 @@ public class DashboardController {
             s = sb.toString();
 		}
 		catch (Exception ex) { System.out.println("ECCEZIONE catturata: " + ex); }
-		System.out.println("STRINGA RICEVUTA: " + s);
+		if(s.isEmpty() ||s.charAt(0)!='{') {System.out.println("Stringa ricevuta non valida."); return; }
         JSONObject o = new JSONObject(s);
 		view.update(parsingMacchinari((String)o.get("lista")));	
 	}
