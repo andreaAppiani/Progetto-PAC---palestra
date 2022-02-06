@@ -105,6 +105,7 @@ public class AppController {
 		}	
 	}
 	
+	// Converte la stringa JSON ottenuta dal Server in una lista di Esercizi da mostrare sulla View
 	public List<Esercizio> parsingEsercizi(String s) {
 		System.out.println("o.get(lista) ottenuta: " + s);
 		JSONArray Array = new JSONArray(s);
