@@ -16,13 +16,10 @@ public class MyController implements MyControllerIF{
 
 	private JSONParser parser;
 	private final AtomicLong counter = new AtomicLong();
-	
 	private MyModel model;
 	private ControllerAggregatore aggr;
 	
-	// Lista delle schede fitness che hanno richiesto l'aggiornamento; 
-	// permette di ottenerle + velocemente che dal DB
-	public List<SchedaFitness> listaSchede;
+	public List<SchedaFitness> listaSchede; //Le schede prelevate dal DB vengono qui salvate per un accesso più rapido alla prossima richiesta
 	
 	private MyController(){
 		listaSchede = new ArrayList<>();
@@ -41,7 +38,6 @@ public class MyController implements MyControllerIF{
 		if(scheda == null) {
 			scheda = model.getSchedaByID(id);
 			listaSchede.add(scheda);
-			System.out.println("Scheda ritornata: " + scheda.getLista().toString());
 			return parser.parseListaMacchinariEs(scheda.getLista(), counter);	
 		}
 		else return parser.parseListaMacchinariEs(scheda.getLista(), counter);
@@ -59,8 +55,6 @@ public class MyController implements MyControllerIF{
 	
 	
 	public List<Macchinario> AlgoritmoGreedy(SchedaFitness s, List<Macchinario> lm){
-		
-		System.out.println("Scheda trovata: " + s.getLista().toString());
 		
 		List<Macchinario> aggiornata = new LinkedList<>();
 		
@@ -91,7 +85,7 @@ public class MyController implements MyControllerIF{
 		return aggiornata;
 	}
 	
-	public SchedaFitness searchScheda(int id) {
+	private SchedaFitness searchScheda(int id) {
 		for (Iterator<SchedaFitness> iterator = listaSchede.iterator(); iterator.hasNext();) {
 			SchedaFitness s = (SchedaFitness) iterator.next();
 			if(s.getID()==id) {return s;}
@@ -107,8 +101,9 @@ public class MyController implements MyControllerIF{
 				return (tempoMac.compareTo(LocalTime.now()) > 0) ? null : m;
 			}			
 		}
-		return null; 
-		// l'esercizio non ha un macchinario corrispondente; 
-		// lascio che l'algoritmo lo sostituisca con un macchinario libero
+		
+		// l'esercizio non ha un macchinario corrispondente: ritorno NULL 
+		// così che l'algoritmo lo sostituisca con un macchinario libero
+		return null;
 	}
 }
