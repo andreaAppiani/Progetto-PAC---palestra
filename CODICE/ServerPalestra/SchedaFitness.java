@@ -26,7 +26,5 @@ public class SchedaFitness {
 	
 	Esercizio getEsercizio(int index) {return lista.get(index);}
 	
-	//void addMacchinario(Macchinario m) { lista.add(m); }
-	
 	List<Esercizio> getLista(){return lista;}
 }
