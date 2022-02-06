@@ -14,8 +14,7 @@ public class MyModel implements MyModelIF{
 	}
 	
 	public SchedaFitness getSchedaByID(int i){
-		SchedaFitness S = new SchedaFitness(i);
-		return S;
+		// ritorna la SchedaFitness
 	}
 	
 }
