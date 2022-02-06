@@ -29,20 +29,7 @@ public class ControllerAggregatore implements InfoMachineriIF,StatusIF {
 		controller = new ControllerAggregatore();
 		return controller;
 				}
-	private ControllerAggregatore() {
-		// per motivi di Testing, questi sarebbero gli stati attuali dei macchinari
-		
-		Macchinario m1 = new Macchinario("Panca piana","Pettorali","10:15:00");
-		Macchinario m2 = new Macchinario("Colonna","Braccia","10:17:00");
-		Macchinario m3 = new Macchinario("Cavi","Braccia","10:10:00");
-		Macchinario m4 = new Macchinario("Leg-press","Gambe","16:20:30");
-		Macchinario m5 = new Macchinario("Leg-extension","Gambe","10:15:30");
-		Macchinario m6 = new Macchinario("Panca inclinata","Pettorali","23:59:59");
-		
-		listaM.removeAll(listaM);
-		listaM.add(m1);listaM.add(m2);listaM.add(m3);listaM.add(m4);listaM.add(m5);listaM.add(m6);	
-	}
-	
+	private ControllerAggregatore() {}
 	
 	public List<Macchinario> getStatoMacchinari(){
 		return listaM;
