@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 public class JSONParser {
 	
-	//Riceve la lista di macchinari e un ID per creare la RisorsaJSON da inviare al Client
+	// Riceve la lista di Macchinari e un ID per creare la RisorsaJSON da inviare al Client
 	
 	public RisorsaJSON parseListaMacchinari(List<Macchinario> l, boolean tempo,  AtomicLong counter) {
 
@@ -26,6 +26,7 @@ public class JSONParser {
 		return new RisorsaJSON(ja.toString(), counter.incrementAndGet());
 	}
 
+	// Riceve la lista di Esercizi e un ID per creare la RisorsaJSON da inviare al Client
 	public RisorsaJSON parseListaMacchinariEs(List<Esercizio> l, AtomicLong counter) {
 			
 			JSONArray ja = new JSONArray();
