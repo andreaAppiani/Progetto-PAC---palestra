@@ -1,15 +1,15 @@
 package com.example.demo;
 
-public class MyModel implements MyModelIF{
+public class Model implements ModelIF{
 	
 	//----------COMPONENTE MOCK----------------
 	
 	//Dovrebbe inviare una Query al DB richiedendo una specifica Scheda tramite ID
 	
-	private MyModel(){}
-	public static MyModel model;
-	public static MyModel getModel() {
-		model = new MyModel();
+	private Model(){}
+	public static Model model;
+	public static Model getModel() {
+		model = new Model();
 		return model;
 	}
 	
