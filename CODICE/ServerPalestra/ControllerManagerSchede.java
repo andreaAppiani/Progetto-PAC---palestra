@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class ControllerManagerSchede implements MyControllerIF{
+public class ControllerManagerSchede implements ControllerManagerSchedeIF{
 
 	private JSONParser parser;
 	private final AtomicLong counter = new AtomicLong();
