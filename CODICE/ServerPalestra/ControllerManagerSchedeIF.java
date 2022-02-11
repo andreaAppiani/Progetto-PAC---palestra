@@ -1,9 +1,9 @@
 package com.example.demo;
 
 /**
- * The Interface MyControllerIF.
+ * The Interface ControllerManagerSchedeIF.
  */
-public interface MyControllerIF {
+public interface ControllerManagerSchedeIF {
 
 	/**
 	 * Ritorna la lista di esercizi della scheda fitness richiesta dall'utente.
