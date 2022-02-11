@@ -43,7 +43,7 @@ public class AppController {
 	            s = sb.toString();
 			}
 			catch (Exception ex) { System.out.println("ECCEZIONE catturata: " + ex); }
-            JSONObject o = new JSONObject(s);   
+            		JSONObject o = new JSONObject(s);   
 			view.updateTabella(parsingEsercizi((String)o.get("lista")));
 		}	
 	}
@@ -66,8 +66,8 @@ public class AppController {
 			catch (Exception ex) { System.out.println("ECCEZIONE catturata: " + ex); }
 			
 			if(s.charAt(0)!='{') { System.out.println("Risposta server errata: " + s); return; }
-            JSONObject o = new JSONObject(s);
-            view.switchPanel("schermata scheda");
+			JSONObject o = new JSONObject(s);
+			view.switchPanel("schermata scheda");
 			view.updateTabella(parsingEsercizi((String)o.get("lista")));	
 		}
 	}
