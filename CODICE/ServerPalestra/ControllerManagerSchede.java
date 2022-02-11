@@ -12,24 +12,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class MyController implements MyControllerIF{
+public class ControllerManagerSchede implements MyControllerIF{
 
 	private JSONParser parser;
 	private final AtomicLong counter = new AtomicLong();
-	private MyModel model;
+	private Model model;
 	private ControllerAggregatore aggr;
 	
 	public List<SchedaFitness> listaSchede; //Le schede prelevate dal DB vengono qui salvate per un accesso più rapido alla prossima richiesta
 	
-	private MyController(){
+	private ControllerManagerSchede(){
 		listaSchede = new ArrayList<>();
 		parser = new JSONParser();
-		model = MyModel.getModel();
+		model = Model.getModel();
 		aggr= ControllerAggregatore.getController();
 		}
 		
-	public static MyController controller;
-	public static MyController getController() {controller = new MyController(); return controller;}
+	public static ControllerManagerSchede controller;
+	public static ControllerManagerSchede getController() {controller = new ControllerManagerSchede(); return controller;}
 
 	@Override
 	@GetMapping("/getScheda")
