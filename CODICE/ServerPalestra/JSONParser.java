@@ -22,7 +22,6 @@ public class JSONParser {
 			
 			ja.put(o);
 		}
-		System.out.println("JSONARRAY RITORNATO: " + ja.toString());
 		return new RisorsaJSON(ja.toString(), counter.incrementAndGet());
 	}
 
@@ -40,7 +39,6 @@ public class JSONParser {
 				o.put("serie", l.get(i).getSerie());
 				ja.put(o);
 			}
-		
 			return new RisorsaJSON(ja.toString(), counter.incrementAndGet());
 		}
 }
