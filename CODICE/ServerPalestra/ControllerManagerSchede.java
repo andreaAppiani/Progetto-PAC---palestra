@@ -12,24 +12,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class ControllerManagerSchede implements ControllerManagerSchedeIF{
+public class MyController implements MyControllerIF{
 
 	private JSONParser parser;
 	private final AtomicLong counter = new AtomicLong();
-	private Model model;
+	
+	private MyModel model;
 	private ControllerAggregatore aggr;
 	
-	public List<SchedaFitness> listaSchede; //Le schede prelevate dal DB vengono qui salvate per un accesso più rapido alla prossima richiesta
+	// Lista delle schede fitness che hanno richiesto l'aggiornamento; 
+	// permette di ottenerle + velocemente che dal DB
+	public List<SchedaFitness> listaSchede;
 	
-	private ControllerManagerSchede(){
+	private MyController(){
 		listaSchede = new ArrayList<>();
 		parser = new JSONParser();
-		model = Model.getModel();
+		model = MyModel.getModel();
 		aggr= ControllerAggregatore.getController();
 		}
 		
-	public static ControllerManagerSchede controller;
-	public static ControllerManagerSchede getController() {controller = new ControllerManagerSchede(); return controller;}
+	public static MyController controller = null;
+	public static MyController getController() {
+		if(controller == null) controller = new MyController(); 
+		return controller;}
 
 	@Override
 	@GetMapping("/getScheda")
@@ -38,9 +43,10 @@ public class ControllerManagerSchede implements ControllerManagerSchedeIF{
 		if(scheda == null) {
 			scheda = model.getSchedaByID(id);
 			listaSchede.add(scheda);
-			return parser.parseListaMacchinariEs(scheda.getLista(), counter);	
+			System.out.println("Scheda ritornata: " + scheda.getLista().toString());
+			return parser.parseListaEsercizi(scheda.getLista(), counter);	
 		}
-		else return parser.parseListaMacchinariEs(scheda.getLista(), counter);
+		else return parser.parseListaEsercizi(scheda.getLista(), counter);
 	}
 	
 	@Override
@@ -48,44 +54,72 @@ public class ControllerManagerSchede implements ControllerManagerSchedeIF{
 	public RisorsaJSON aggiornaScheda(int id) {
 		List<Macchinario> lista_mac = aggr.getStatoMacchinari(); 
 
-		List<Macchinario> aggiornata = AlgoritmoGreedy(searchScheda(id), lista_mac);
+		List<Esercizio> aggiornata = AlgoritmoGreedy(searchScheda(id), lista_mac);
 		
-		return parser.parseListaMacchinari(aggiornata,false, counter);
+		return parser.parseListaEsercizi(aggiornata, counter);
 	}
 	
 	
-	public List<Macchinario> AlgoritmoGreedy(SchedaFitness s, List<Macchinario> lm){
+	List<Esercizio> AlgoritmoGreedy(SchedaFitness s, List<Macchinario> lm){
 		
-		List<Macchinario> aggiornata = new LinkedList<>();
+		System.out.println("Scheda trovata: " + s.getLista().toString());
 		
-		PriorityQueue<Macchinario> braccia = new PriorityQueue<>(new MyComparator());
+		List<Esercizio> aggiornata = new LinkedList<>();
+		
+		PriorityQueue<Macchinario> bicipiti = new PriorityQueue<>(new MyComparator());
 		PriorityQueue<Macchinario> gambe = new PriorityQueue<>(new MyComparator());
 		PriorityQueue<Macchinario> pettorali = new PriorityQueue<>(new MyComparator());
+		PriorityQueue<Macchinario> tricipiti = new PriorityQueue<>(new MyComparator());
+		PriorityQueue<Macchinario> dorsali = new PriorityQueue<>(new MyComparator());
 		
 		for (Iterator<Macchinario> iterator = lm.iterator(); iterator.hasNext();) {
 			Macchinario x = (Macchinario) iterator.next();
 			switch(x.getTipo()) {
-				case "Braccia": braccia.add(x); break; 
+				case "Bicipiti": bicipiti.add(x); break; 
+				case "Tricipiti": tricipiti.add(x); break; 
+				case "Dorsali": dorsali.add(x); break; 
 				case "Gambe": gambe.add(x); break;
 				case "Pettorali": pettorali.add(x); break;
 			}
 		}
 		
 		for(int i=0; i<s.getLunghezzaLista();i++) {
+			Esercizio E = s.getEsercizio(i);
+			Macchinario M = macchinarioLibero(E.getNome(), lm);
+			if(M!=null) {aggiornata.add(new Esercizio(M.getNome(), M.getTipo(), E.getSerie())); continue;}  
 			
-			Macchinario M = macchinarioLibero(s.getEsercizio(i).getNome(), lm);
-			if(M!=null) {aggiornata.add(M); continue;}  
-			
+			Macchinario X;
 			switch(s.getEsercizio(i).getTipologia()) {
-				case "Braccia": aggiornata.add(braccia.poll()); break;
-				case "Gambe": aggiornata.add(gambe.poll()); break;
-				case "Pettorali": aggiornata.add(pettorali.poll()); break;
+				case "Bicipiti": 
+					X = bicipiti.poll(); 
+					if(X == null || X.getTempo().equals("23:59:59")) {aggiornata.add(E); break;}
+					else {aggiornata.add(new Esercizio(X.getNome(), X.getTipo(), E.getSerie())); break;}
+				
+				case "Tricipiti": 
+					X = tricipiti.poll(); 
+					if(X == null || X.getTempo().equals("23:59:59")) {aggiornata.add(E); break;}
+					else {aggiornata.add(new Esercizio(X.getNome(), X.getTipo(), E.getSerie())); break;}
+				
+				case "Dorsali": 
+					X = dorsali.poll(); 
+					if(X == null || X.getTempo().equals("23:59:59")) {aggiornata.add(E); break;}
+					else {aggiornata.add(new Esercizio(X.getNome(), X.getTipo(), E.getSerie())); break;}
+					
+				case "Gambe": 
+					X = gambe.poll(); 
+					if(X == null || X.getTempo().equals("23:59:59")) {aggiornata.add(E); break;}
+					else {aggiornata.add(new Esercizio(X.getNome(), X.getTipo(), E.getSerie())); break;}
+				
+				case "Pettorali": 
+					X = pettorali.poll(); 
+					if(X == null || X.getTempo().equals("23:59:59")) {aggiornata.add(E); break;}
+					else {aggiornata.add(new Esercizio(X.getNome(), X.getTipo(), E.getSerie())); break;}
 			}
 		}
 		return aggiornata;
 	}
 	
-	private SchedaFitness searchScheda(int id) {
+	public SchedaFitness searchScheda(int id) {
 		for (Iterator<SchedaFitness> iterator = listaSchede.iterator(); iterator.hasNext();) {
 			SchedaFitness s = (SchedaFitness) iterator.next();
 			if(s.getID()==id) {return s;}
@@ -101,9 +135,8 @@ public class ControllerManagerSchede implements ControllerManagerSchedeIF{
 				return (tempoMac.compareTo(LocalTime.now()) > 0) ? null : m;
 			}			
 		}
-		
-		// l'esercizio non ha un macchinario corrispondente: ritorno NULL 
-		// così che l'algoritmo lo sostituisca con un macchinario libero
-		return null;
+		return null; 
+		// l'esercizio non ha un macchinario corrispondente; 
+		// lascio che l'algoritmo lo sostituisca con un macchinario libero
 	}
 }

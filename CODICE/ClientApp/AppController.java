@@ -15,7 +15,7 @@ public class AppController {
 
 	private AppView view;
 	
-	public static AppController controller;
+	public static AppController controller = null;
 	
 	private AppController(AppView v) {
 		view = v;
@@ -25,7 +25,9 @@ public class AppController {
 		view.addListenerLogout(new Logout());
 	}
 	
-	public static AppController getController(AppView view) {controller = new AppController(view); return controller;}
+	public static AppController getController(AppView view) {
+		if(controller == null) controller = new AppController(view); 
+		return controller;}
 	
 	class getScheda implements ActionListener{
 		@Override
@@ -43,7 +45,7 @@ public class AppController {
 	            s = sb.toString();
 			}
 			catch (Exception ex) { System.out.println("ECCEZIONE catturata: " + ex); }
-            		JSONObject o = new JSONObject(s);   
+            JSONObject o = new JSONObject(s);   
 			view.updateTabella(parsingEsercizi((String)o.get("lista")));
 		}	
 	}
@@ -66,8 +68,8 @@ public class AppController {
 			catch (Exception ex) { System.out.println("ECCEZIONE catturata: " + ex); }
 			
 			if(s.charAt(0)!='{') { System.out.println("Risposta server errata: " + s); return; }
-			JSONObject o = new JSONObject(s);
-			view.switchPanel("schermata scheda");
+            JSONObject o = new JSONObject(s);
+            view.switchPanel("schermata scheda");
 			view.updateTabella(parsingEsercizi((String)o.get("lista")));	
 		}
 	}
@@ -105,7 +107,6 @@ public class AppController {
 		}	
 	}
 	
-	// Converte la stringa JSON ottenuta dal Server in una lista di Esercizi da mostrare sulla View
 	public List<Esercizio> parsingEsercizi(String s) {
 		System.out.println("o.get(lista) ottenuta: " + s);
 		JSONArray Array = new JSONArray(s);
@@ -114,9 +115,7 @@ public class AppController {
 		for(int n = 0; n < Array.length(); n++)
 		{
 		    JSONObject obj = Array.getJSONObject(n);
-		    Esercizio e = new Esercizio();
-		    e.setNome(obj.getString("nome"));
-			e.setTipologia(obj.getString("tipo"));
+		    Esercizio e = new Esercizio(obj.getString("nome"),obj.getString("tipo"),obj.getString("serie"));
 			lista.add(e);
 		}
 		return lista;

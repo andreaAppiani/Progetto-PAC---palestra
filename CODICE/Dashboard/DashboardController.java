@@ -13,12 +13,14 @@ public class DashboardController {
 
 	private DashboardView view;
 	
-	public static DashboardController controller;
+	public static DashboardController controller = null;
 	private DashboardController(DashboardView V) {
 		view = V;	
 		ciclo();
 		}
-	public static DashboardController getController(DashboardView view) { controller = new DashboardController(view); return controller;}
+	public static DashboardController getController(DashboardView view) { 
+		if(controller == null) controller = new DashboardController(view); 
+		return controller;}
 	
 	private void ciclo() {
 		while(true) {
@@ -35,23 +37,19 @@ public class DashboardController {
 		try {
 			url = new URL("http://localhost:8080/getStatoMacchinari");
 			
-            		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
-			StringBuilder sb = new StringBuilder();
-			String line;
-			while ((line = bufferedReader.readLine()) != null) {sb.append(line);}
-			bufferedReader.close();
-			s = sb.toString();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {sb.append(line);}
+            bufferedReader.close();
+            s = sb.toString();
 		}
 		catch (Exception ex) { System.out.println("ECCEZIONE catturata: " + ex); }
-		if(s.isEmpty() ||s.charAt(0)!='{') 
-			{System.out.println("Stringa ricevuta non valida:" + s); return; }
-       
-		JSONObject o = new JSONObject(s);
+		if(s.isEmpty() ||s.charAt(0)!='{') {System.out.println("Stringa ricevuta non valida."); return; }
+        JSONObject o = new JSONObject(s);
 		view.update(parsingMacchinari((String)o.get("lista")));	
 	}
 
-	
-	// Converte la stringa JSON ricevuta dal Server in una lista di Esercizi da mostrare sulla View
 	public List<Macchinario> parsingMacchinari(String s) {
 		JSONArray Array = new JSONArray(s);
 		List<Macchinario> lista = new ArrayList<>();

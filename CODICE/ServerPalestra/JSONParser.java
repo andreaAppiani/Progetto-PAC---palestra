@@ -7,11 +7,10 @@ import org.json.JSONObject;
 
 public class JSONParser {
 	
-	// Riceve la lista di Macchinari e un ID per creare la RisorsaJSON da inviare al Client
+	//Riceve la lista di macchinari e un ID per creare la RisorsaJSON da inviare al Client
 	
-	public RisorsaJSON parseListaMacchinari(List<Macchinario> l, boolean tempo,  AtomicLong counter) {
+	public RisorsaJSON parseListaMacchinari(List<Macchinario> l, AtomicLong counter) {
 
-		
 		JSONArray ja = new JSONArray();
 		
 		for(int i=0; i<l.size(); i++) {
@@ -19,15 +18,15 @@ public class JSONParser {
 			JSONObject o = new JSONObject();
 			o.put("nome", l.get(i).getNome());
 			o.put("tipo", l.get(i).getTipo());		
-			if(tempo) o.put("tempo", l.get(i).getTempo());
+			o.put("tempo", l.get(i).getTempo());
+			
 			ja.put(o);
 		}
 		System.out.println("JSONARRAY RITORNATO: " + ja.toString());
 		return new RisorsaJSON(ja.toString(), counter.incrementAndGet());
 	}
 
-	// Riceve la lista di Esercizi e un ID per creare la RisorsaJSON da inviare al Client
-	public RisorsaJSON parseListaMacchinariEs(List<Esercizio> l, AtomicLong counter) {
+	public RisorsaJSON parseListaEsercizi(List<Esercizio> l, AtomicLong counter) {
 			
 			JSONArray ja = new JSONArray();
 			
@@ -36,6 +35,7 @@ public class JSONParser {
 				JSONObject o = new JSONObject();
 				o.put("nome", l.get(i).getNome());
 				o.put("tipo", l.get(i).getTipologia());
+				o.put("serie", l.get(i).getSerie());
 				ja.put(o);
 			}
 		
