@@ -26,6 +26,8 @@ public class JSONParser {
 		return new RisorsaJSON(ja.toString(), counter.incrementAndGet());
 	}
 
+	// Riceve la lista di esercizi e un ID per creare la RisorsaJSON da inviare al Client
+	
 	public RisorsaJSON parseListaEsercizi(List<Esercizio> l, AtomicLong counter) {
 			
 			JSONArray ja = new JSONArray();
