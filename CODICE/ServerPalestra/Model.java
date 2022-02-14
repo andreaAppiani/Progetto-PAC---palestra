@@ -6,10 +6,10 @@ public class MyModel implements MyModelIF{
 	
 	//Dovrebbe inviare una Query al DB richiedendo una specifica Scheda tramite ID
 	
-	private MyModel(){}
-	public static MyModel model = null;
-	public static MyModel getModel() {
-		if(model == null) model = new MyModel();
+	private Model(){}
+	public static Model model = null;
+	public static Model getModel() {
+		if(model == null) model = new Model();
 		return model;
 	}
 	
