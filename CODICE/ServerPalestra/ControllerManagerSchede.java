@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class MyController implements MyControllerIF{
+public class ControllerManagerSchede implements ControllerManagerSchedeIF{
 
 	private JSONParser parser;
 	private final AtomicLong counter = new AtomicLong();
@@ -20,20 +20,20 @@ public class MyController implements MyControllerIF{
 	private MyModel model;
 	private ControllerAggregatore aggr;
 	
-	// Lista delle schede fitness che hanno richiesto l'aggiornamento; 
-	// permette di ottenerle + velocemente che dal DB
+	// Lista delle schede fitness prelevate dal DB; 
+	// permette di ottenerle più velocemente che dal DB per ogni successiva richiesta di aggiornamento.
 	public List<SchedaFitness> listaSchede;
 	
-	private MyController(){
+	private ControllerManagerSchede(){
 		listaSchede = new ArrayList<>();
 		parser = new JSONParser();
 		model = MyModel.getModel();
 		aggr= ControllerAggregatore.getController();
 		}
 		
-	public static MyController controller = null;
-	public static MyController getController() {
-		if(controller == null) controller = new MyController(); 
+	public static ControllerManagerSchede controller = null;
+	public static ControllerManagerSchede getController() {
+		if(controller == null) controller = new ControllerManagerSchede(); 
 		return controller;}
 
 	@Override
@@ -136,7 +136,7 @@ public class MyController implements MyControllerIF{
 			}			
 		}
 		return null; 
-		// l'esercizio non ha un macchinario corrispondente; 
+		// Ritorno NULL se l'esercizio non ha un macchinario corrispondente; 
 		// lascio che l'algoritmo lo sostituisca con un macchinario libero
 	}
 }
