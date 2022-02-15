@@ -34,7 +34,7 @@ public interface AppViewIF {
 	 * @param ActionListener
 	 */
 	void addListenerLogout(ActionListener a);
-	
+
 	/**
 	 * Modifica la schermata visualizzata sulla View
 	 *
@@ -60,6 +60,5 @@ public interface AppViewIF {
 	 * @return password
 	 */
 	String getPassword();
-
 
 }

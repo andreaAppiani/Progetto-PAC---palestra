@@ -12,5 +12,5 @@ public interface Model_IF {
 	 * @return la scheda fitness
 	 */
 	SchedaFitness getSchedaByID(int i);
-	
+
 }

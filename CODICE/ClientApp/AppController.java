@@ -14,9 +14,9 @@ import org.json.JSONObject;
 public class AppController {
 
 	private AppView view;
-	
+
 	public static AppController controller = null;
-	
+
 	private AppController(AppView v) {
 		view = v;
 		view.addListenerAccedi(new Autenticazione());
@@ -24,98 +24,112 @@ public class AppController {
 		view.addListenerSchedaAggiornata(new getSchedaAggiornata());
 		view.addListenerLogout(new Logout());
 	}
-	
+
 	public static AppController getController(AppView view) {
-		if(controller == null) controller = new AppController(view); 
-		return controller;}
-	
-	class getScheda implements ActionListener{
+		if (controller == null)
+			controller = new AppController(view);
+		return controller;
+	}
+
+	class getScheda implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String s = "";
 			URL url;
 			try {
 				url = new URL("http://localhost:8080/getScheda?id=1");
-				
-	            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
-	            StringBuilder sb = new StringBuilder();
-	            String line;
-	            while ((line = bufferedReader.readLine()) != null) {sb.append(line);}
-	            bufferedReader.close();
-	            s = sb.toString();
+
+				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+				StringBuilder sb = new StringBuilder();
+				String line;
+				while ((line = bufferedReader.readLine()) != null) {
+					sb.append(line);
+				}
+				bufferedReader.close();
+				s = sb.toString();
+			} catch (Exception ex) {
+				System.out.println("ECCEZIONE catturata: " + ex);
 			}
-			catch (Exception ex) { System.out.println("ECCEZIONE catturata: " + ex); }
-            JSONObject o = new JSONObject(s);   
-			view.updateTabella(parsingEsercizi((String)o.get("lista")));
-		}	
+			JSONObject o = new JSONObject(s);
+			view.updateTabella(parsingEsercizi((String) o.get("lista")));
+		}
 	}
-	
-	class getSchedaAggiornata implements ActionListener{
+
+	class getSchedaAggiornata implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String s = "";
 			URL url;
 			try {
 				url = new URL("http://localhost:8080/aggiornaScheda?id=1");
-				
-	            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
-	            StringBuilder sb = new StringBuilder();
-	            String line;
-	            while ((line = bufferedReader.readLine()) != null) {sb.append(line);}
-	            bufferedReader.close();
-	            s = sb.toString();
+
+				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+				StringBuilder sb = new StringBuilder();
+				String line;
+				while ((line = bufferedReader.readLine()) != null) {
+					sb.append(line);
+				}
+				bufferedReader.close();
+				s = sb.toString();
+			} catch (Exception ex) {
+				System.out.println("ECCEZIONE catturata: " + ex);
 			}
-			catch (Exception ex) { System.out.println("ECCEZIONE catturata: " + ex); }
-			
-			if(s.charAt(0)!='{') { System.out.println("Risposta server errata: " + s); return; }
-            JSONObject o = new JSONObject(s);
-            view.switchPanel("schermata scheda");
-			view.updateTabella(parsingEsercizi((String)o.get("lista")));	
+
+			if (s.charAt(0) != '{') {
+				System.out.println("Risposta server errata: " + s);
+				return;
+			}
+			JSONObject o = new JSONObject(s);
+			view.switchPanel("schermata scheda");
+			view.updateTabella(parsingEsercizi((String) o.get("lista")));
 		}
 	}
-	
-	class Autenticazione implements ActionListener{
+
+	class Autenticazione implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String s = "";
 			URL url;
-			String MyUrl = "http://localhost:8080/autentica?" + "nome=" + view.getNome() + "&password=" + view.getPassword();
+			String MyUrl = "http://localhost:8080/autentica?" + "nome=" + view.getNome() + "&password="
+					+ view.getPassword();
 			try {
-				url = new URL(MyUrl);			
-	            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
-	            StringBuilder sb = new StringBuilder();
-	            String line;
-	            while ((line = bufferedReader.readLine()) != null) {sb.append(line);}
-	            bufferedReader.close();
-	            s = sb.toString();
-			}
-			catch (Exception ex) { System.out.println("ECCEZIONE catturata: " + ex); }
-			
-			if(s.equals("AUTENTICATO")) {
-				view.switchPanel("schermata scheda");
-				getScheda get = new getScheda(); 
-				get.actionPerformed(e); //va a eseguire la normale richiesta per la Scheda Originale
+				url = new URL(MyUrl);
+				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+				StringBuilder sb = new StringBuilder();
+				String line;
+				while ((line = bufferedReader.readLine()) != null) {
+					sb.append(line);
 				}
-			else view.loginErrato();
+				bufferedReader.close();
+				s = sb.toString();
+			} catch (Exception ex) {
+				System.out.println("ECCEZIONE catturata: " + ex);
 			}
+
+			if (s.equals("AUTENTICATO")) {
+				view.switchPanel("schermata scheda");
+				getScheda get = new getScheda();
+				get.actionPerformed(e); // va a eseguire la normale richiesta per la Scheda Originale
+			} else
+				view.loginErrato();
 		}
-	
-	class Logout implements ActionListener{
+	}
+
+	class Logout implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			view.switchPanel("schermata login");
-		}	
+		}
 	}
-	
+
 	public List<Esercizio> parsingEsercizi(String s) {
 		System.out.println("o.get(lista) ottenuta: " + s);
 		JSONArray Array = new JSONArray(s);
 		List<Esercizio> lista = new ArrayList<>();
-		
-		for(int n = 0; n < Array.length(); n++)
-		{
-		    JSONObject obj = Array.getJSONObject(n);
-		    Esercizio e = new Esercizio(obj.getString("nome"),obj.getString("tipo"),obj.getString("serie"));
+
+		for (int n = 0; n < Array.length(); n++) {
+			JSONObject obj = Array.getJSONObject(n);
+			Esercizio e = new Esercizio(obj.getString("nome"), obj.getString("tipo"), obj.getString("serie"));
 			lista.add(e);
 		}
 		return lista;

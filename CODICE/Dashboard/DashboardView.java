@@ -18,9 +18,12 @@ public class DashboardView implements DashboardViewIF {
 	private JTable table;
 
 	public static DashboardView view;
+
 	public static DashboardView getView() {
-		view = new DashboardView(); return view;
+		view = new DashboardView();
+		return view;
 	}
+
 	private DashboardView() {
 		initialize();
 		frame.setVisible(true);
@@ -34,34 +37,34 @@ public class DashboardView implements DashboardViewIF {
 		frame.setBounds(100, 100, 383, 426);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-		
+
 		JLabel lblNewLabel = new JLabel("Stato dei macchinari:");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 19));
 		frame.getContentPane().add(lblNewLabel);
-		
+
 		table = new JTable();
 		table.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		
-		String headers[] = new String[] {"Macchinario", "Gruppo Muscolare", "Stato"};
-		table.setModel(new DefaultTableModel(headers,0));
-		
+
+		String headers[] = new String[] { "Macchinario", "Gruppo Muscolare", "Stato" };
+		table.setModel(new DefaultTableModel(headers, 0));
+
 		table.getColumnModel().getColumn(2).setPreferredWidth(93);
 		table.setBounds(41, 110, 260, 238);
 		table.setRowHeight(20);
-		//frame.getContentPane().add(table);
-		//table.setFillsViewportHeight(true);
+		// frame.getContentPane().add(table);
+		// table.setFillsViewportHeight(true);
 		JScrollPane scrollPane = new JScrollPane(table);
 		frame.getContentPane().add(scrollPane);
 	}
-	
+
 	public void update(List<Macchinario> lista) {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
-		model.setRowCount(0); //resetta la tabella
-		
+		model.setRowCount(0); // resetta la tabella
+
 		for (Iterator<Macchinario> iterator = lista.iterator(); iterator.hasNext();) {
 			Macchinario m = (Macchinario) iterator.next();
-			model.addRow(new String[]{m.getNome(), m.getTipo(), m.getStato()});
+			model.addRow(new String[] { m.getNome(), m.getTipo(), m.getStato() });
 		}
 	}
 }

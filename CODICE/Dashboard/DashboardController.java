@@ -12,52 +12,64 @@ import org.json.JSONObject;
 public class DashboardController {
 
 	private DashboardView view;
-	
+
 	public static DashboardController controller = null;
+
 	private DashboardController(DashboardView V) {
-		view = V;	
+		view = V;
 		ciclo();
-		}
-	public static DashboardController getController(DashboardView view) { 
-		if(controller == null) controller = new DashboardController(view); 
-		return controller;}
-	
-	private void ciclo() {
-		while(true) {
-			getStatoMacchinari();	
-			try {TimeUnit.SECONDS.sleep(5);} 
-			catch (InterruptedException e) {e.printStackTrace();}
-			}
 	}
-	
+
+	public static DashboardController getController(DashboardView view) {
+		if (controller == null)
+			controller = new DashboardController(view);
+		return controller;
+	}
+
+	private void ciclo() {
+		while (true) {
+			getStatoMacchinari();
+			try {
+				TimeUnit.SECONDS.sleep(5);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	private void getStatoMacchinari() {
-		
+
 		String s = "";
 		URL url;
 		try {
 			url = new URL("http://localhost:8080/getStatoMacchinari");
-			
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {sb.append(line);}
-            bufferedReader.close();
-            s = sb.toString();
+
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+			StringBuilder sb = new StringBuilder();
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				sb.append(line);
+			}
+			bufferedReader.close();
+			s = sb.toString();
+		} catch (Exception ex) {
+			System.out.println("ECCEZIONE catturata: " + ex);
 		}
-		catch (Exception ex) { System.out.println("ECCEZIONE catturata: " + ex); }
-		if(s.isEmpty() ||s.charAt(0)!='{') {System.out.println("Stringa ricevuta non valida."); return; }
-        JSONObject o = new JSONObject(s);
-		view.update(parsingMacchinari((String)o.get("lista")));	
+		if (s.isEmpty() || s.charAt(0) != '{') {
+			System.out.println("Stringa ricevuta non valida.");
+			return;
+		}
+		JSONObject o = new JSONObject(s);
+		view.update(parsingMacchinari((String) o.get("lista")));
 	}
 
 	public List<Macchinario> parsingMacchinari(String s) {
 		JSONArray Array = new JSONArray(s);
 		List<Macchinario> lista = new ArrayList<>();
-		for(int n = 0; n < Array.length(); n++)
-		{
-		    JSONObject obj = Array.getJSONObject(n);
-		    Macchinario m = new Macchinario();
-		    m.setNome(obj.getString("nome"));
+		for (int n = 0; n < Array.length(); n++) {
+			JSONObject obj = Array.getJSONObject(n);
+			Macchinario m = new Macchinario();
+			m.setNome(obj.getString("nome"));
 			m.setTipo(obj.getString("tipo"));
 			m.setTempo(obj.getString("tempo"));
 			lista.add(m);
