@@ -3,7 +3,7 @@ package com.example.demo;
 /**
  * The Interface MyModelIF.
  */
-public interface ModelIF {
+public interface Model_IF {
 
 	/**
 	 * Ritorna la scheda fitness richiesta dall'utente recuperandola dal Database

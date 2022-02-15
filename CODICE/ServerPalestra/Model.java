@@ -1,6 +1,6 @@
 package com.example.demo;
 
-public class MyModel implements MyModelIF{
+public class Model implements Model_IF{
 	
 	//----------COMPONENTE MOCK----------------
 	

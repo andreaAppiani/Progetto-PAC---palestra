@@ -35,6 +35,4 @@ class MyComparator implements Comparator<Macchinario>{
 		else if (t1.compareTo(t2) < 0) return -1;
 		else return 0;
 	}
-
-
 }

@@ -12,22 +12,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class ControllerManagerSchede implements ControllerManagerSchedeIF{
+public class ControllerManagerSchede implements UserRequest_IF, TrainerRequest_IF{
 
 	private JSONParser parser;
 	private final AtomicLong counter = new AtomicLong();
 	
-	private MyModel model;
+	private Model model;
 	private ControllerAggregatore aggr;
 	
-	// Lista delle schede fitness prelevate dal DB; 
-	// permette di ottenerle più velocemente che dal DB per ogni successiva richiesta di aggiornamento.
+	// Lista delle schede fitness che hanno richiesto l'aggiornamento; 
+	// permette di ottenerle + velocemente che dal DB
 	public List<SchedaFitness> listaSchede;
 	
 	private ControllerManagerSchede(){
 		listaSchede = new ArrayList<>();
 		parser = new JSONParser();
-		model = MyModel.getModel();
+		model = Model.getModel();
 		aggr= ControllerAggregatore.getController();
 		}
 		
@@ -136,7 +136,17 @@ public class ControllerManagerSchede implements ControllerManagerSchedeIF{
 			}			
 		}
 		return null; 
-		// Ritorno NULL se l'esercizio non ha un macchinario corrispondente; 
+		// l'esercizio non ha un macchinario corrispondente; 
 		// lascio che l'algoritmo lo sostituisca con un macchinario libero
+	}
+
+	@Override
+	public void addScheda(SchedaFitness s) {
+		// Non Implementato	
+	}
+
+	@Override
+	public void removeScheda(int id) {
+		// Non Implementato	
 	}
 }

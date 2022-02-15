@@ -22,11 +22,10 @@ public class JSONParser {
 			
 			ja.put(o);
 		}
+		System.out.println("JSONARRAY RITORNATO: " + ja.toString());
 		return new RisorsaJSON(ja.toString(), counter.incrementAndGet());
 	}
 
-	// Riceve la lista di esercizi e un ID per creare la RisorsaJSON da inviare al Client
-	
 	public RisorsaJSON parseListaEsercizi(List<Esercizio> l, AtomicLong counter) {
 			
 			JSONArray ja = new JSONArray();
@@ -39,6 +38,7 @@ public class JSONParser {
 				o.put("serie", l.get(i).getSerie());
 				ja.put(o);
 			}
+		
 			return new RisorsaJSON(ja.toString(), counter.incrementAndGet());
 		}
 }

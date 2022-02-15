@@ -30,8 +30,7 @@ public class ControllerAggregatore implements InfoMachineriIF,StatusIF {
 		return controller;
 				}
 	private ControllerAggregatore() {
-		
-		// Per simulare un utilizzo del sistema, i seguenti rappresentano gli stati attuali (fissi) dei macchinari
+		// per motivi di Testing, questi simulano gli stati attuali (fissi) dei macchinari
 		
 		Macchinario m1 = new Macchinario("Panca Piana","Pettorali","17:00:00");
 		Macchinario m2 = new Macchinario("Panca Inclinata","Pettorali","09:00:00");
@@ -49,6 +48,7 @@ public class ControllerAggregatore implements InfoMachineriIF,StatusIF {
 		Macchinario m10 = new Macchinario("Leg-Extension","Gambe","23:59:59");	
 		Macchinario m11 = new Macchinario("Leg-Curl","Gambe","10:10:30");
 		
+		listaM.removeAll(listaM);
 		listaM.add(m1);listaM.add(m2);listaM.add(m3);listaM.add(m4);listaM.add(m5);
 		listaM.add(m6);	listaM.add(m7);listaM.add(m8);listaM.add(m9);listaM.add(m10);listaM.add(m11);
 	}
