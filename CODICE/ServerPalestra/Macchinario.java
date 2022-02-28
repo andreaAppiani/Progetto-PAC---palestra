@@ -13,8 +13,6 @@ class Macchinario {
 		nome = n;
 		tipo = t;
 		tempo = Temp;
-		// Conversione Stringa > LocalTime
-		// tempo = LocalTime.parse(Temp);
 	}
 
 	String getNome() {
